@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/context/AuthContext';
+import { MdClose } from 'react-icons/md';
+import { FiMenu } from 'react-icons/fi';
 
 const links = [
   { path: '/', text: 'Home' },
@@ -10,8 +12,22 @@ const links = [
 ];
 
 const Navbar = () => {
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
+  const ref = useRef();
+  useEffect(() => {
+    const handler = (event) => {
+      if (navbarOpen && ref.current && !ref.current.contains(event.target)) {
+        setNavbarOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener('mousedown', handler);
+    };
+  }, [navbarOpen]);
 
   const handleLogout = () => {
     logout();
@@ -20,26 +36,57 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <ul>
+      <nav ref={ref} className="navbar">
+        <button
+          className="toggle"
+          onClick={() => setNavbarOpen((prev) => !prev)}
+        >
+          {navbarOpen ? (
+            <MdClose style={{ width: '32px', height: '32px' }} />
+          ) : (
+            <FiMenu
+              style={{
+                width: '32px',
+                height: '32px',
+              }}
+            />
+          )}
+        </button>
+
+        <ul className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}>
           {links.map((link) => {
             return (
               <React.Fragment key={link.text}>
                 {link.path === 'login' ? (
                   !user && (
                     <li>
-                      <NavLink to={link.path}>{link.text}</NavLink>
+                      <NavLink
+                        onClick={() => setNavbarOpen(false)}
+                        to={link.path}
+                      >
+                        {link.text}
+                      </NavLink>
                     </li>
                   )
                 ) : link.path === 'profile' ? (
                   user && (
                     <li>
-                      <NavLink to={link.path}>{link.text}</NavLink>
+                      <NavLink
+                        to={link.path}
+                        onClick={() => setNavbarOpen(false)}
+                      >
+                        {link.text}
+                      </NavLink>
                     </li>
                   )
                 ) : (
                   <li>
-                    <NavLink to={link.path}>{link.text}</NavLink>
+                    <NavLink
+                      to={link.path}
+                      onClick={() => setNavbarOpen(false)}
+                    >
+                      {link.text}
+                    </NavLink>
                   </li>
                 )}
               </React.Fragment>
