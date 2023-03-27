@@ -1,6 +1,6 @@
 import styles from '@/styles/Header.module.scss';
 
-const Header = () => {
+const Header = (props) => {
   const headerStyle = {
     padding: '20px 0',
     lineHeight: '1.5em',
