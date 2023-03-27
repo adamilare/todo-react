@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import TodoApp from '@/components/TodoApp';
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <TodoApp />
+    <BrowserRouter>
+      <TodoApp />
+    </BrowserRouter>
   </React.StrictMode>
 );
