@@ -1,5 +1,6 @@
-import { useAuthContext } from '@/context/AuthContext';
-import styles from '@/styles/Profile.module.scss';
+import styles from '../styles/Profile.module.css';
+import Header from '../components/Header';
+import { useAuthContext } from '../context/AuthContext';
 
 const Profile = () => {
   const { user } = useAuthContext();
@@ -9,7 +10,10 @@ const Profile = () => {
         <h1>profile.</h1>
       </Header>
       <div className={styles.profile}>
-        <h2>Hello, {user}</h2>
+        <h2>
+          Hello,
+          {user}
+        </h2>
       </div>
     </div>
   );

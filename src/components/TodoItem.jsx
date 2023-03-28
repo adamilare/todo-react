@@ -1,10 +1,13 @@
-import styles from '@/styles/TodoItem.module.scss';
 import { useState, useRef } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { AiFillEdit } from 'react-icons/ai';
-import { useAuthContext } from '@/context/AuthContext';
+import PropTypes from 'prop-types';
+import styles from '../styles/TodoItem.module.css';
+import { useAuthContext } from '../context/AuthContext';
 
-const TodoItem = ({ itemProp, handleChange, delTodo, setUpdate }) => {
+const TodoItem = ({
+  itemProp, handleChange, delTodo, setUpdate,
+}) => {
   const [editing, setEditing] = useState(false);
   const editInputRef = useRef(null);
   const { user } = useAuthContext();
@@ -14,8 +17,8 @@ const TodoItem = ({ itemProp, handleChange, delTodo, setUpdate }) => {
     opacity: 0.4,
     textDecoration: 'line-through',
   };
-  let viewMode = {};
-  let editMode = {};
+  const viewMode = {};
+  const editMode = {};
   if (editing) {
     viewMode.display = 'none';
   } else {
@@ -42,12 +45,13 @@ const TodoItem = ({ itemProp, handleChange, delTodo, setUpdate }) => {
         />
         {user && (
           <>
-            <button onClick={handleEditing}>
+            <button type="button" onClick={handleEditing}>
               <AiFillEdit />
             </button>
-            <button onClick={() => delTodo(itemProp.id)}>
+            <button type="button" onClick={() => delTodo(itemProp.id)}>
               <FaTrash />
-            </button>{' '}
+            </button>
+            {' '}
           </>
         )}
         <span style={itemProp.completed ? completedStyle : null}>
@@ -67,4 +71,16 @@ const TodoItem = ({ itemProp, handleChange, delTodo, setUpdate }) => {
     </li>
   );
 };
+
+TodoItem.propTypes = {
+  delTodo: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  setUpdate: PropTypes.func.isRequired,
+  itemProp: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
+};
+
 export default TodoItem;
